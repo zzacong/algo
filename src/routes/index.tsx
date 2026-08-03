@@ -73,7 +73,7 @@ function GalleryPage() {
       <SiteHeader
         left={
           <>
-            <span className="text-sm font-bold tracking-tight text-foreground">sort.</span>
+            <span className="text-sm font-bold tracking-tight text-foreground">algo.</span>
             <span className="hidden rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground sm:inline">
               8 algorithms
             </span>

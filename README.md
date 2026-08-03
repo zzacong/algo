@@ -1,8 +1,12 @@
-# learn-sort
+# algo.
 
-An interactive visualiser for 8 classic sorting algorithms, built with React, TypeScript, Vite, TanStack Router, and Tailwind CSS v4.
+A visual learning platform for algorithms — sorting, pathfinding, trees, and more. Each algorithm is animated step by step with complexity and metadata breakdowns.
 
-## Algorithms
+Built with React, TypeScript, Vite, TanStack Router, and Tailwind CSS v4.
+
+## Categories
+
+### Sorting (8 algorithms)
 
 | Algorithm      | Avg         | Worst      | Space    |
 | -------------- | ----------- | ---------- | -------- |
@@ -15,7 +19,17 @@ An interactive visualiser for 8 classic sorting algorithms, built with React, Ty
 | Shell Sort     | O(n log² n) | O(n²)      | O(1)     |
 | Counting Sort  | O(n+k)      | O(n+k)     | O(k)     |
 
-Each algorithm sorts the same 12-element seed array `[7, 3, 11, 1, 9, 4, 12, 6, 2, 10, 5, 8]` and emits a frame-by-frame snapshot of the array after every swap or placement. The gallery page animates all previews simultaneously; clicking a card opens a full-screen step-by-step view.
+### Pathfinding (4 algorithms)
+
+BFS, DFS, Dijkstra, A\* — visualised on a 2D grid showing visited cells and the discovered path.
+
+### Trees (4 operations)
+
+BST Insert, BST Search, BST Delete, AVL Rotation — visualised as animated node/edge diagrams.
+
+### Coming Soon
+
+Graph algorithms, Dynamic Programming, Searching.
 
 ## Tech stack
 
@@ -23,7 +37,7 @@ Each algorithm sorts the same 12-element seed array `[7, 3, 11, 1, 9, 4, 12, 6, 
 - **Vite 8** with `@vitejs/plugin-react`
 - **TanStack Router** (file-based routing, auto-generated route tree)
 - **Tailwind CSS v4** via `@tailwindcss/vite`
-- **shadcn/ui** components (`Button`) via `components.json`
+- **shadcn/ui** components via `components.json`
 - **Base UI** (`@base-ui/react`) for accessible primitives
 - **Inter** variable font (`@fontsource-variable/inter`)
 - **oxlint** + **oxfmt** for linting and formatting
@@ -52,16 +66,30 @@ pnpm dev        # start dev server
 
 ```
 src/
-  data/algorithms.ts        # algorithm implementations + metadata
+  data/
+    algorithms.ts         # sorting algorithm implementations + metadata
+    pathfinding.ts        # pathfinding algorithm implementations + metadata
+    trees.ts              # tree operation implementations + metadata
+    categories.ts         # top-level category definitions
   components/
-    SortVisualizer.tsx      # animated bar-chart visualiser
-    ThemeToggle.tsx         # light/dark toggle
-    theme-provider.tsx      # React context for theme
-    ui/                     # shadcn/ui components
+    sort-visualizer.tsx   # animated bar-chart visualiser
+    grid-visualizer.tsx   # animated 2D grid visualiser (pathfinding)
+    tree-visualizer.tsx   # animated node/edge visualiser (trees)
+    theme-toggle.tsx      # light/dark toggle
+    theme-provider.tsx    # React context for theme
+    ui/                   # shadcn/ui components
   routes/
-    __root.tsx              # root layout (theme provider, keyboard shortcut)
-    index.tsx               # gallery page (all algorithm cards)
-    algorithm.$id.tsx       # detail page (full animation + complexity)
+    __root.tsx            # root layout (theme provider, keyboard shortcut)
+    index.tsx             # homepage — category selector
+    sorting/
+      index.tsx           # sorting sub-gallery
+      $id.tsx             # sorting detail page
+    pathfinding/
+      index.tsx           # pathfinding sub-gallery
+      $id.tsx             # pathfinding detail page
+    trees/
+      index.tsx           # trees sub-gallery
+      $id.tsx             # trees detail page
   main.tsx
 ```
 

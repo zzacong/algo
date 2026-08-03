@@ -64,7 +64,7 @@ function AlgorithmDetailPage() {
             Gallery
           </Link>
         }
-        center="sort."
+        center="algo."
       />
 
       {/* Page content */}
