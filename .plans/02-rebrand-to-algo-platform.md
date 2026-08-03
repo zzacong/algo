@@ -8,19 +8,19 @@ Lift the site from a single-purpose sorting visualiser into a full algorithm lea
 
 ## Decisions
 
-| Decision | Choice |
-|---|---|
-| Brand name | `algo.` |
-| Top-level nav | Category landing pages |
-| Launch categories (full) | Sorting, Pathfinding, Trees |
-| Launch categories (placeholder) | Graph, Dynamic Programming, Searching |
-| URL shape | Category-scoped: `/sorting/bubble-sort`, `/pathfinding/dijkstra`, `/trees/bst-insert` |
-| Old `/algorithm/$id` route | Removed — no redirect |
-| Detail page layout | Unified template, flexible per-algorithm metadata rows |
-| Pathfinding visualizer | `GridVisualizer` — 2D grid canvas, same frames/fps pattern |
-| Tree visualizer | `TreeVisualizer` — node/edge canvas, same frames/fps pattern |
-| Coming soon tiles | Pure decorative placeholder, no interaction |
-| In-repo branding | `<title>`, site header, `README.md`, `package.json` name |
+| Decision                        | Choice                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------- |
+| Brand name                      | `algo.`                                                                               |
+| Top-level nav                   | Category landing pages                                                                |
+| Launch categories (full)        | Sorting, Pathfinding, Trees                                                           |
+| Launch categories (placeholder) | Graph, Dynamic Programming, Searching                                                 |
+| URL shape                       | Category-scoped: `/sorting/bubble-sort`, `/pathfinding/dijkstra`, `/trees/bst-insert` |
+| Old `/algorithm/$id` route      | Removed — no redirect                                                                 |
+| Detail page layout              | Unified template, flexible per-algorithm metadata rows                                |
+| Pathfinding visualizer          | `GridVisualizer` — 2D grid canvas, same frames/fps pattern                            |
+| Tree visualizer                 | `TreeVisualizer` — node/edge canvas, same frames/fps pattern                          |
+| Coming soon tiles               | Pure decorative placeholder, no interaction                                           |
+| In-repo branding                | `<title>`, site header, `README.md`, `package.json` name                              |
 
 ---
 
@@ -67,6 +67,7 @@ src/routes/
 ### New files
 
 **`src/data/pathfinding.ts`**
+
 - `PathfindingAlgorithmId` union type
 - `GridCell` type: `"empty" | "wall" | "start" | "end" | "visited" | "path"`
 - `GridFrame`: `{ grid: GridCell[][]; stats: Record<string, string> }`
@@ -75,6 +76,7 @@ src/routes/
 - Export `PATHFINDING_ALGORITHMS`, `getPathfindingAlgorithm(id)`
 
 **`src/data/trees.ts`**
+
 - `TreeAlgorithmId` union type
 - `TreeNode`: `{ value: number; left?: number; right?: number; state: NodeState }`
 - `NodeState`: `"default" | "active" | "found" | "inserted" | "deleted"`
@@ -84,6 +86,7 @@ src/routes/
 - Export `TREE_ALGORITHMS`, `getTreeAlgorithm(id)`
 
 **`src/data/categories.ts`**
+
 - `Category` type: `{ id, name, description, route, count, status: "live" | "coming-soon" }`
 - `CATEGORIES` array — all 6 entries (3 live, 3 coming-soon)
 
@@ -92,11 +95,13 @@ src/routes/
 ## Visualizer Components
 
 ### Existing
+
 `src/components/sort-visualizer.tsx` — unchanged, keep as-is.
 
 ### New
 
 **`src/components/grid-visualizer.tsx`**
+
 - Props: `frames: GridFrame[]`, `fps?: number` (default 8), `size?: "sm" | "lg"`
 - Canvas-based, `rAF` loop, same pause-and-loop pattern as `SortVisualizer`
 - Cell colors read from CSS variables (visited = accent, path = primary, wall = foreground, etc.)
@@ -104,6 +109,7 @@ src/routes/
 - `aria-hidden="true"` wrapper
 
 **`src/components/tree-visualizer.tsx`**
+
 - Props: `frames: TreeFrame[]`, `fps?: number` (default 6), `size?: "sm" | "lg"`
 - Canvas-based, `rAF` loop
 - Draws nodes as circles, edges as lines; highlights active nodes per frame state
@@ -127,13 +133,13 @@ Sorting detail page is migrated to `/sorting/$id` with no functional changes bey
 
 ## Branding Changes
 
-| Location | Old | New |
-|---|---|---|
-| `package.json` `name` | `learn-sort` | `algo` |
-| `index.html` `<title>` | `sort.` (or similar) | `algo.` |
-| `src/routes/index.tsx` header | `sort.` | `algo.` |
-| `src/components/site-header.tsx` | any `sort.` references | `algo.` |
-| `README.md` title/description | sorting-focused | algo. platform description |
+| Location                         | Old                    | New                        |
+| -------------------------------- | ---------------------- | -------------------------- |
+| `package.json` `name`            | `learn-sort`           | `algo`                     |
+| `index.html` `<title>`           | `sort.` (or similar)   | `algo.`                    |
+| `src/routes/index.tsx` header    | `sort.`                | `algo.`                    |
+| `src/components/site-header.tsx` | any `sort.` references | `algo.`                    |
+| `README.md` title/description    | sorting-focused        | algo. platform description |
 
 ---
 
@@ -147,6 +153,7 @@ Sorting detail page is migrated to `/sorting/$id` with no functional changes bey
 Update all in-repo brand references from `sort.` to `algo.` — `package.json`, `index.html`, `README.md`, and any component text.
 
 **Todo List**
+
 1. Update `package.json` `name` to `algo`.
 2. Update `index.html` `<title>` to `algo.`.
 3. Update `README.md` — new title, new description.
@@ -162,6 +169,7 @@ Update all in-repo brand references from `sort.` to `algo.` — `package.json`, 
 Create the new category-scoped TanStack Router file structure. Delete the old flat route. Migrate existing sorting pages to `/sorting/*`.
 
 **Todo List**
+
 1. Create `src/routes/sorting/` directory.
 2. Move `src/routes/algorithm.$id.tsx` → `src/routes/sorting/$id.tsx` (update back-link to `/sorting`).
 3. Create `src/routes/sorting/index.tsx` (copy of current `src/routes/index.tsx` gallery, scoped to sorting).
@@ -180,6 +188,7 @@ Create the new category-scoped TanStack Router file structure. Delete the old fl
 Implement `src/data/pathfinding.ts` with 4 algorithms producing `GridFrame[]` sequences on a fixed demo grid.
 
 **Todo List**
+
 1. Create `src/data/pathfinding.ts`.
 2. Define types: `PathfindingAlgorithmId`, `GridCell`, `GridFrame`, `PathfindingAlgorithm`.
 3. Define a fixed demo grid (e.g. 10×10 with a few wall cells, fixed start/end).
@@ -199,6 +208,7 @@ Implement `src/data/pathfinding.ts` with 4 algorithms producing `GridFrame[]` se
 Implement `src/data/trees.ts` with 4 tree operations producing `TreeFrame[]` sequences.
 
 **Todo List**
+
 1. Create `src/data/trees.ts`.
 2. Define types: `TreeAlgorithmId`, `NodeState`, `TreeNode`, `TreeFrame`, `TreeAlgorithm`.
 3. Define a fixed demo tree (pre-populated BST with ~8 nodes).
@@ -218,6 +228,7 @@ Implement `src/data/trees.ts` with 4 tree operations producing `TreeFrame[]` seq
 Rebuild `src/routes/index.tsx` as the category selector — a hero + grid of 6 category tiles (3 live, 3 coming-soon).
 
 **Todo List**
+
 1. Create `src/data/categories.ts` with `CATEGORIES` array.
 2. Rewrite `src/routes/index.tsx` — hero section + 6-tile category grid.
 3. Live tiles link to their sub-gallery route; coming-soon tiles are non-interactive with a visual "soon" badge.
@@ -233,6 +244,7 @@ Rebuild `src/routes/index.tsx` as the category selector — a hero + grid of 6 c
 Build `src/components/grid-visualizer.tsx` — canvas-based 2D grid animation.
 
 **Todo List**
+
 1. Create `src/components/grid-visualizer.tsx`.
 2. Define props: `frames: GridFrame[]`, `fps?: number`, `size?: "sm" | "lg"`.
 3. Implement `rAF` loop identical in structure to `SortVisualizer`.
@@ -251,6 +263,7 @@ Build `src/components/grid-visualizer.tsx` — canvas-based 2D grid animation.
 Build `src/components/tree-visualizer.tsx` — canvas-based node/edge tree animation.
 
 **Todo List**
+
 1. Create `src/components/tree-visualizer.tsx`.
 2. Define props: `frames: TreeFrame[]`, `fps?: number`, `size?: "sm" | "lg"`.
 3. Implement `rAF` loop.
@@ -269,6 +282,7 @@ Build `src/components/tree-visualizer.tsx` — canvas-based node/edge tree anima
 Fill in the pathfinding route scaffolds with real UI — sub-gallery at `/pathfinding`, detail page at `/pathfinding/$id`.
 
 **Todo List**
+
 1. Implement `src/routes/pathfinding/index.tsx` — sub-gallery page with 4 pathfinding algorithm cards using `GridVisualizer size="sm"`.
 2. Implement `src/routes/pathfinding/$id.tsx` — detail page with `GridVisualizer size="lg"` and flexible metadata table.
 
@@ -282,6 +296,7 @@ Fill in the pathfinding route scaffolds with real UI — sub-gallery at `/pathfi
 Fill in the trees route scaffolds with real UI — sub-gallery at `/trees`, detail page at `/trees/$id`.
 
 **Todo List**
+
 1. Implement `src/routes/trees/index.tsx` — sub-gallery page with 4 tree operation cards using `TreeVisualizer size="sm"`.
 2. Implement `src/routes/trees/$id.tsx` — detail page with `TreeVisualizer size="lg"` and flexible metadata table.
 
@@ -295,6 +310,7 @@ Fill in the trees route scaffolds with real UI — sub-gallery at `/trees`, deta
 Cross-cutting polish pass: consistent navigation, back-links, category breadcrumbs, and `pnpm check` passing clean.
 
 **Todo List**
+
 1. Ensure `SiteHeader` on all sub-gallery and detail pages shows `algo.` brand and correct back-link.
 2. Add category label breadcrumb on detail pages (e.g. "Pathfinding → Dijkstra").
 3. Verify all `pnpm check` (fmt + typecheck + lint) pass with zero errors.

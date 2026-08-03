@@ -10,43 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AlgorithmIdRouteImport } from './routes/algorithm.$id'
+import { Route as PathfindingIndexRouteImport } from './routes/pathfinding/index'
+import { Route as PathfindingIdRouteImport } from './routes/pathfinding/$id'
+import { Route as SortingIndexRouteImport } from './routes/sorting/index'
+import { Route as SortingIdRouteImport } from './routes/sorting/$id'
+import { Route as TreesIndexRouteImport } from './routes/trees/index'
+import { Route as TreesIdRouteImport } from './routes/trees/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AlgorithmIdRoute = AlgorithmIdRouteImport.update({
-  id: '/algorithm/$id',
-  path: '/algorithm/$id',
+const PathfindingIndexRoute = PathfindingIndexRouteImport.update({
+  id: '/pathfinding/',
+  path: '/pathfinding/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PathfindingIdRoute = PathfindingIdRouteImport.update({
+  id: '/pathfinding/$id',
+  path: '/pathfinding/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SortingIndexRoute = SortingIndexRouteImport.update({
+  id: '/sorting/',
+  path: '/sorting/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SortingIdRoute = SortingIdRouteImport.update({
+  id: '/sorting/$id',
+  path: '/sorting/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreesIndexRoute = TreesIndexRouteImport.update({
+  id: '/trees/',
+  path: '/trees/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreesIdRoute = TreesIdRouteImport.update({
+  id: '/trees/$id',
+  path: '/trees/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/algorithm/$id': typeof AlgorithmIdRoute
+  '/pathfinding/$id': typeof PathfindingIdRoute
+  '/sorting/$id': typeof SortingIdRoute
+  '/trees/$id': typeof TreesIdRoute
+  '/pathfinding/': typeof PathfindingIndexRoute
+  '/sorting/': typeof SortingIndexRoute
+  '/trees/': typeof TreesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/algorithm/$id': typeof AlgorithmIdRoute
+  '/pathfinding/$id': typeof PathfindingIdRoute
+  '/sorting/$id': typeof SortingIdRoute
+  '/trees/$id': typeof TreesIdRoute
+  '/pathfinding': typeof PathfindingIndexRoute
+  '/sorting': typeof SortingIndexRoute
+  '/trees': typeof TreesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/algorithm/$id': typeof AlgorithmIdRoute
+  '/pathfinding/$id': typeof PathfindingIdRoute
+  '/sorting/$id': typeof SortingIdRoute
+  '/trees/$id': typeof TreesIdRoute
+  '/pathfinding/': typeof PathfindingIndexRoute
+  '/sorting/': typeof SortingIndexRoute
+  '/trees/': typeof TreesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/algorithm/$id'
+  fullPaths:
+    | '/'
+    | '/pathfinding/$id'
+    | '/sorting/$id'
+    | '/trees/$id'
+    | '/pathfinding/'
+    | '/sorting/'
+    | '/trees/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/algorithm/$id'
-  id: '__root__' | '/' | '/algorithm/$id'
+  to:
+    | '/'
+    | '/pathfinding/$id'
+    | '/sorting/$id'
+    | '/trees/$id'
+    | '/pathfinding'
+    | '/sorting'
+    | '/trees'
+  id:
+    | '__root__'
+    | '/'
+    | '/pathfinding/$id'
+    | '/sorting/$id'
+    | '/trees/$id'
+    | '/pathfinding/'
+    | '/sorting/'
+    | '/trees/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AlgorithmIdRoute: typeof AlgorithmIdRoute
+  PathfindingIdRoute: typeof PathfindingIdRoute
+  SortingIdRoute: typeof SortingIdRoute
+  TreesIdRoute: typeof TreesIdRoute
+  PathfindingIndexRoute: typeof PathfindingIndexRoute
+  SortingIndexRoute: typeof SortingIndexRoute
+  TreesIndexRoute: typeof TreesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +130,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/algorithm/$id': {
-      id: '/algorithm/$id'
-      path: '/algorithm/$id'
-      fullPath: '/algorithm/$id'
-      preLoaderRoute: typeof AlgorithmIdRouteImport
+    '/pathfinding/': {
+      id: '/pathfinding/'
+      path: '/pathfinding'
+      fullPath: '/pathfinding/'
+      preLoaderRoute: typeof PathfindingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pathfinding/$id': {
+      id: '/pathfinding/$id'
+      path: '/pathfinding/$id'
+      fullPath: '/pathfinding/$id'
+      preLoaderRoute: typeof PathfindingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sorting/': {
+      id: '/sorting/'
+      path: '/sorting'
+      fullPath: '/sorting/'
+      preLoaderRoute: typeof SortingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sorting/$id': {
+      id: '/sorting/$id'
+      path: '/sorting/$id'
+      fullPath: '/sorting/$id'
+      preLoaderRoute: typeof SortingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trees/': {
+      id: '/trees/'
+      path: '/trees'
+      fullPath: '/trees/'
+      preLoaderRoute: typeof TreesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trees/$id': {
+      id: '/trees/$id'
+      path: '/trees/$id'
+      fullPath: '/trees/$id'
+      preLoaderRoute: typeof TreesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +177,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AlgorithmIdRoute: AlgorithmIdRoute,
+  PathfindingIdRoute: PathfindingIdRoute,
+  SortingIdRoute: SortingIdRoute,
+  TreesIdRoute: TreesIdRoute,
+  PathfindingIndexRoute: PathfindingIndexRoute,
+  SortingIndexRoute: SortingIndexRoute,
+  TreesIndexRoute: TreesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

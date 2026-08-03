@@ -7,8 +7,8 @@ import { SiteHeader } from "@/components/site-header";
 import { SortVisualizer } from "@/components/sort-visualizer";
 import { getAlgorithm, SEED_INPUT } from "@/data/algorithms";
 
-export const Route = createFileRoute("/algorithm/$id")({
-  component: AlgorithmDetailPage,
+export const Route = createFileRoute("/sorting/$id")({
+  component: SortingDetailPage,
 });
 
 function ComplexityRow({ label, value }: { label: string; value: string }) {
@@ -25,7 +25,7 @@ function ComplexityRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function AlgorithmDetailPage() {
+function SortingDetailPage() {
   const { id } = Route.useParams();
   const algo = getAlgorithm(id);
 
@@ -39,14 +39,14 @@ function AlgorithmDetailPage() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center">
         <p className="text-lg font-semibold text-foreground">Algorithm not found</p>
         <p className="text-sm text-muted-foreground">
-          There's no algorithm with the id <code className="font-mono">{id}</code>.
+          There's no sorting algorithm with the id <code className="font-mono">{id}</code>.
         </p>
         <Link
-          to="/"
+          to="/sorting"
           className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-primary"
         >
           <ArrowIcon direction="left" className="size-4" />
-          Back to Gallery
+          Back to Sorting
         </Link>
       </div>
     );
@@ -57,11 +57,11 @@ function AlgorithmDetailPage() {
       <SiteHeader
         left={
           <Link
-            to="/"
+            to="/sorting"
             className="flex items-center gap-1.5 rounded text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-primary"
           >
             <ArrowIcon direction="left" className="size-3.5" />
-            Gallery
+            Sorting
           </Link>
         }
         center="algo."
@@ -74,7 +74,7 @@ function AlgorithmDetailPage() {
           <div className="flex flex-col gap-6 lg:w-80 lg:shrink-0">
             <div>
               <p className="mb-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
-                Algorithm
+                Sorting
               </p>
               <h1 className="text-2xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-3xl">
                 {algo.name}
