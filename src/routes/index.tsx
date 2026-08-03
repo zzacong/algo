@@ -5,15 +5,15 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { PageFooter } from "@/components/page-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SortVisualizer } from "@/components/sort-visualizer";
-import { ALGORITHMS, SEED_INPUT, type Algorithm } from "@/data/algorithms";
+import { ALGORITHMS, SEED_INPUT, type Algorithm, type SortFrame } from "@/data/algorithms";
 
 export const Route = createFileRoute("/")({
   component: GalleryPage,
 });
 
-const FRAMES_CACHE = new Map<string, number[][]>();
+const FRAMES_CACHE = new Map<string, SortFrame[]>();
 
-function getFrames(algo: Algorithm): number[][] {
+function getFrames(algo: Algorithm): SortFrame[] {
   if (!FRAMES_CACHE.has(algo.id)) {
     FRAMES_CACHE.set(algo.id, algo.sort(SEED_INPUT));
   }

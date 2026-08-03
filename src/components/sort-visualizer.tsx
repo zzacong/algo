@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 
+import type { SortFrame } from "@/data/algorithms";
+
 interface SortVisualizerProps {
-  frames: number[][];
+  frames: SortFrame[];
   fps?: number;
   size?: "sm" | "lg";
 }
@@ -9,6 +11,13 @@ interface SortVisualizerProps {
 const HEIGHT: Record<"sm" | "lg", number> = { sm: 80, lg: 260 };
 const BAR_GAP = 2;
 const PAUSE_MS = 700;
+
+// Vivid, distinct palette for the three bar states — works in both light and dark
+const COLORS = {
+  unsorted: "#6366f1", // indigo — the default resting state
+  selected: "#f59e0b", // amber — bars being actively compared / moved
+  sorted: "#10b981", // emerald — bars that have reached their final position
+} as const;
 
 export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -35,16 +44,6 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
 
     resizeCanvas();
 
-    function getColors() {
-      const style = getComputedStyle(document.documentElement);
-      const primary = style.getPropertyValue("--primary").trim();
-      const muted = style.getPropertyValue("--muted").trim();
-      return {
-        bar: primary,
-        bg: muted,
-      };
-    }
-
     function draw(now: number) {
       if (!canvas || !ctx) return;
       const interval = 1000 / fps;
@@ -59,26 +58,22 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
       }
 
       const currentFrame = frames[frameIndex] ?? frames[0];
-      const { bar: barColor } = getColors();
+      const { values, states } = currentFrame;
       const canvasW = canvas.offsetWidth;
       const canvasH = height;
-      const n = currentFrame.length;
+      const n = values.length;
       const barW = (canvasW - BAR_GAP * (n + 1)) / n;
-      const maxVal = Math.max(...currentFrame);
+      const maxVal = Math.max(...values);
 
       ctx.clearRect(0, 0, canvasW, canvasH);
 
       for (let i = 0; i < n; i++) {
-        const barH = (currentFrame[i] / maxVal) * (canvasH - BAR_GAP * 2);
+        const barH = (values[i] / maxVal) * (canvasH - BAR_GAP * 2);
         const x = BAR_GAP + i * (barW + BAR_GAP);
         const y = canvasH - barH;
 
-        // Slightly highlight bars that are in position (last few frames look sorted)
-        const isFinalFrame = frameIndex === frames.length - 1;
-        ctx.fillStyle = isFinalFrame
-          ? getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()
-          : barColor;
-        ctx.globalAlpha = isFinalFrame ? 1 : 0.75 + 0.25 * (i / n);
+        ctx.fillStyle = COLORS[states[i]];
+        ctx.globalAlpha = 1;
 
         const radius = Math.min(3, barW / 2);
         ctx.beginPath();

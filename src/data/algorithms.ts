@@ -15,72 +15,134 @@ export interface AlgorithmComplexity {
   space: string;
 }
 
+/** State of each bar in a single frame */
+export type BarState = "unsorted" | "selected" | "sorted";
+
+/** A single animation frame: parallel arrays of values and per-bar states */
+export interface SortFrame {
+  values: number[];
+  states: BarState[];
+}
+
 export interface Algorithm {
   id: AlgorithmId;
   name: string;
   description: string;
   complexity: AlgorithmComplexity;
-  sort: (input: number[]) => number[][];
+  sort: (input: number[]) => SortFrame[];
 }
 
 const SEED = [7, 3, 11, 1, 9, 4, 12, 6, 2, 10, 5, 8];
 
-function snapshot(arr: number[]): number[] {
-  return [...arr];
+function frame(arr: number[], states: BarState[]): SortFrame {
+  return { values: [...arr], states: [...states] };
 }
 
-function bubbleSortFrames(input: number[]): number[][] {
+function allUnsorted(n: number): BarState[] {
+  return new Array<BarState>(n).fill("unsorted");
+}
+
+function bubbleSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
   const n = arr.length;
+  const sortedFrom = n; // index at which sorted region starts (from the right)
+  const frames: SortFrame[] = [];
+
+  // Build a mutable states array
+  const states: BarState[] = allUnsorted(n);
+  frames.push(frame(arr, states));
+
   for (let i = 0; i < n - 1; i++) {
     for (let j = 0; j < n - 1 - i; j++) {
+      // Highlight the two bars being compared
+      states[j] = "selected";
+      states[j + 1] = "selected";
+      frames.push(frame(arr, states));
+
       if (arr[j] > arr[j + 1]) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        frames.push(snapshot(arr));
+        frames.push(frame(arr, states));
       }
+
+      states[j] = "unsorted";
+      states[j + 1] = "unsorted";
     }
+    // The last position in this pass is now sorted
+    states[n - 1 - i] = "sorted";
   }
+  states[0] = "sorted";
+  frames.push(frame(arr, states));
+  void sortedFrom;
   return frames;
 }
 
-function selectionSortFrames(input: number[]): number[][] {
+function selectionSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
   const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
+
   for (let i = 0; i < n - 1; i++) {
     let minIdx = i;
+    states[minIdx] = "selected";
+
     for (let j = i + 1; j < n; j++) {
-      if (arr[j] < arr[minIdx]) minIdx = j;
+      states[j] = "selected";
+      frames.push(frame(arr, states));
+      if (arr[j] < arr[minIdx]) {
+        states[minIdx] = "unsorted";
+        minIdx = j;
+        states[minIdx] = "selected";
+      } else {
+        states[j] = "unsorted";
+      }
     }
+
     if (minIdx !== i) {
       [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
-      frames.push(snapshot(arr));
+      states[minIdx] = "unsorted";
     }
+    states[i] = "sorted";
+    frames.push(frame(arr, states));
   }
+  states[n - 1] = "sorted";
+  frames.push(frame(arr, states));
   return frames;
 }
 
-function insertionSortFrames(input: number[]): number[][] {
+function insertionSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
   const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  // element 0 is trivially sorted
+  states[0] = "sorted";
+  const frames: SortFrame[] = [frame(arr, states)];
+
   for (let i = 1; i < n; i++) {
     const key = arr[i];
+    states[i] = "selected";
+    frames.push(frame(arr, states));
+
     let j = i - 1;
     while (j >= 0 && arr[j] > key) {
       arr[j + 1] = arr[j];
+      states[j + 1] = "selected";
+      frames.push(frame(arr, states));
+      states[j + 1] = "sorted";
       j--;
     }
     arr[j + 1] = key;
-    frames.push(snapshot(arr));
+    states[j + 1] = "sorted";
+    frames.push(frame(arr, states));
   }
   return frames;
 }
 
-function mergeSortFrames(input: number[]): number[][] {
+function mergeSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
+  const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
 
   function merge(a: number[], left: number, mid: number, right: number) {
     const L = a.slice(left, mid + 1);
@@ -88,46 +150,73 @@ function mergeSortFrames(input: number[]): number[][] {
     let i = 0,
       j = 0,
       k = left;
+
     while (i < L.length && j < R.length) {
+      states[k] = "selected";
       if (L[i] <= R[j]) {
         a[k++] = L[i++];
       } else {
         a[k++] = R[j++];
       }
+      frames.push(frame(a, states));
+      states[k - 1] = "sorted";
     }
-    while (i < L.length) a[k++] = L[i++];
-    while (j < R.length) a[k++] = R[j++];
-    frames.push(snapshot(a));
+    while (i < L.length) {
+      states[k] = "selected";
+      a[k++] = L[i++];
+      frames.push(frame(a, states));
+      states[k - 1] = "sorted";
+    }
+    while (j < R.length) {
+      states[k] = "selected";
+      a[k++] = R[j++];
+      frames.push(frame(a, states));
+      states[k - 1] = "sorted";
+    }
+    // mark the merged region as sorted
+    for (let x = left; x <= right; x++) states[x] = "sorted";
+    frames.push(frame(a, states));
   }
 
   function mergeSort(a: number[], left: number, right: number) {
-    if (left >= right) return;
+    if (left >= right) {
+      states[left] = "sorted";
+      return;
+    }
     const mid = Math.floor((left + right) / 2);
     mergeSort(a, left, mid);
     mergeSort(a, mid + 1, right);
     merge(a, left, mid, right);
   }
 
-  mergeSort(arr, 0, arr.length - 1);
+  mergeSort(arr, 0, n - 1);
   return frames;
 }
 
-function quickSortFrames(input: number[]): number[][] {
+function quickSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
+  const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
 
   function partition(a: number[], low: number, high: number): number {
     const pivot = a[high];
+    states[high] = "selected";
     let i = low - 1;
     for (let j = low; j < high; j++) {
+      states[j] = "selected";
+      frames.push(frame(a, states));
       if (a[j] <= pivot) {
         i++;
         [a[i], a[j]] = [a[j], a[i]];
-        frames.push(snapshot(a));
+        frames.push(frame(a, states));
       }
+      states[j] = "unsorted";
     }
     [a[i + 1], a[high]] = [a[high], a[i + 1]];
-    frames.push(snapshot(a));
+    states[high] = "unsorted";
+    states[i + 1] = "sorted";
+    frames.push(frame(a, states));
     return i + 1;
   }
 
@@ -136,17 +225,23 @@ function quickSortFrames(input: number[]): number[][] {
       const pi = partition(a, low, high);
       quickSort(a, low, pi - 1);
       quickSort(a, pi + 1, high);
+    } else if (low === high) {
+      states[low] = "sorted";
     }
   }
 
-  quickSort(arr, 0, arr.length - 1);
+  quickSort(arr, 0, n - 1);
+  // mark any remaining unsorted as sorted (final state)
+  for (let i = 0; i < n; i++) states[i] = "sorted";
+  frames.push(frame(arr, states));
   return frames;
 }
 
-function heapSortFrames(input: number[]): number[][] {
+function heapSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
   const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
 
   function heapify(a: number[], size: number, root: number) {
     let largest = root;
@@ -155,66 +250,98 @@ function heapSortFrames(input: number[]): number[][] {
     if (left < size && a[left] > a[largest]) largest = left;
     if (right < size && a[right] > a[largest]) largest = right;
     if (largest !== root) {
+      states[root] = "selected";
+      states[largest] = "selected";
       [a[root], a[largest]] = [a[largest], a[root]];
-      frames.push(snapshot(a));
+      frames.push(frame(a, states));
+      states[root] = "unsorted";
+      states[largest] = "unsorted";
       heapify(a, size, largest);
     }
   }
 
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) heapify(arr, n, i);
+
   for (let i = n - 1; i > 0; i--) {
+    states[0] = "selected";
+    states[i] = "selected";
     [arr[0], arr[i]] = [arr[i], arr[0]];
-    frames.push(snapshot(arr));
+    frames.push(frame(arr, states));
+    states[0] = "unsorted";
+    states[i] = "sorted";
     heapify(arr, i, 0);
   }
+  states[0] = "sorted";
+  frames.push(frame(arr, states));
   return frames;
 }
 
-function shellSortFrames(input: number[]): number[][] {
+function shellSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
   const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
   let gap = Math.floor(n / 2);
+
   while (gap > 0) {
     for (let i = gap; i < n; i++) {
       const temp = arr[i];
       let j = i;
+      states[i] = "selected";
+      frames.push(frame(arr, states));
+
       while (j >= gap && arr[j - gap] > temp) {
+        states[j - gap] = "selected";
         arr[j] = arr[j - gap];
+        frames.push(frame(arr, states));
+        states[j - gap] = "unsorted";
+        states[j] = "unsorted";
         j -= gap;
       }
       arr[j] = temp;
-      if (j !== i) frames.push(snapshot(arr));
+      states[j] = "unsorted";
+      frames.push(frame(arr, states));
     }
     gap = Math.floor(gap / 2);
   }
+
+  // Final frame: all sorted
+  for (let i = 0; i < n; i++) states[i] = "sorted";
+  frames.push(frame(arr, states));
   return frames;
 }
 
-function countingSortFrames(input: number[]): number[][] {
+function countingSortFrames(input: number[]): SortFrame[] {
   const arr = [...input];
-  const frames: number[][] = [snapshot(arr)];
+  const n = arr.length;
+  const states: BarState[] = allUnsorted(n);
+  const frames: SortFrame[] = [frame(arr, states)];
+
   const max = Math.max(...arr);
-  const count = new Array<number>(max + 1).fill(0);
-  for (const v of arr) count[v]++;
-  for (let i = 1; i <= max; i++) count[i] += count[i - 1];
-  const output = new Array<number>(arr.length);
-  for (let i = arr.length - 1; i >= 0; i--) {
-    output[count[arr[i]] - 1] = arr[i];
-    count[arr[i]]--;
-  }
-  // produce step-by-step frames by placing values one at a time
-  const result = [...arr];
   const countStep = new Array<number>(max + 1).fill(0);
   for (const v of arr) countStep[v]++;
   for (let i = 1; i <= max; i++) countStep[i] += countStep[i - 1];
-  for (let i = arr.length - 1; i >= 0; i--) {
+
+  const result = [...arr];
+  const placed = new Array<boolean>(n).fill(false);
+
+  for (let i = n - 1; i >= 0; i--) {
     const pos = countStep[arr[i]] - 1;
     result[pos] = arr[i];
     countStep[arr[i]]--;
-    frames.push(snapshot(result));
+
+    // show the placed bar as selected, previously placed as sorted
+    const newStates: BarState[] = result.map((_, idx) => {
+      if (placed[idx]) return "sorted";
+      if (idx === pos) return "selected";
+      return "unsorted";
+    });
+    placed[pos] = true;
+    frames.push({ values: [...result], states: newStates });
   }
-  void output; // used for correctness verification above
+
+  const finalStates: BarState[] = new Array<BarState>(n).fill("sorted");
+  frames.push({ values: [...result], states: finalStates });
   return frames;
 }
 
