@@ -14,8 +14,8 @@ export const Route = createFileRoute("/algorithm/$id")({
 function ComplexityRow({ label, value }: { label: string; value: string }) {
   return (
     <tr className="border-b border-border/60 last:border-0">
-      <td className="py-2.5 pr-4 text-xs text-muted-foreground">{label}</td>
-      <td className="py-2.5 font-mono text-sm font-medium text-foreground">{value}</td>
+      <td className="py-2.5 pr-4 pl-3 text-xs text-muted-foreground">{label}</td>
+      <td className="py-2.5 pr-3 font-mono text-sm font-medium text-foreground">{value}</td>
     </tr>
   );
 }
