@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DpIndexRouteImport } from './routes/dp/index'
+import { Route as DpIdRouteImport } from './routes/dp/$id'
 import { Route as PathfindingIndexRouteImport } from './routes/pathfinding/index'
 import { Route as PathfindingIdRouteImport } from './routes/pathfinding/$id'
 import { Route as SortingIndexRouteImport } from './routes/sorting/index'
@@ -20,6 +22,16 @@ import { Route as TreesIdRouteImport } from './routes/trees/$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DpIndexRoute = DpIndexRouteImport.update({
+  id: '/dp/',
+  path: '/dp/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DpIdRoute = DpIdRouteImport.update({
+  id: '/dp/$id',
+  path: '/dp/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PathfindingIndexRoute = PathfindingIndexRouteImport.update({
@@ -55,18 +67,22 @@ const TreesIdRoute = TreesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dp/$id': typeof DpIdRoute
   '/pathfinding/$id': typeof PathfindingIdRoute
   '/sorting/$id': typeof SortingIdRoute
   '/trees/$id': typeof TreesIdRoute
+  '/dp/': typeof DpIndexRoute
   '/pathfinding/': typeof PathfindingIndexRoute
   '/sorting/': typeof SortingIndexRoute
   '/trees/': typeof TreesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dp/$id': typeof DpIdRoute
   '/pathfinding/$id': typeof PathfindingIdRoute
   '/sorting/$id': typeof SortingIdRoute
   '/trees/$id': typeof TreesIdRoute
+  '/dp': typeof DpIndexRoute
   '/pathfinding': typeof PathfindingIndexRoute
   '/sorting': typeof SortingIndexRoute
   '/trees': typeof TreesIndexRoute
@@ -74,9 +90,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dp/$id': typeof DpIdRoute
   '/pathfinding/$id': typeof PathfindingIdRoute
   '/sorting/$id': typeof SortingIdRoute
   '/trees/$id': typeof TreesIdRoute
+  '/dp/': typeof DpIndexRoute
   '/pathfinding/': typeof PathfindingIndexRoute
   '/sorting/': typeof SortingIndexRoute
   '/trees/': typeof TreesIndexRoute
@@ -85,27 +103,33 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dp/$id'
     | '/pathfinding/$id'
     | '/sorting/$id'
     | '/trees/$id'
+    | '/dp/'
     | '/pathfinding/'
     | '/sorting/'
     | '/trees/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dp/$id'
     | '/pathfinding/$id'
     | '/sorting/$id'
     | '/trees/$id'
+    | '/dp'
     | '/pathfinding'
     | '/sorting'
     | '/trees'
   id:
     | '__root__'
     | '/'
+    | '/dp/$id'
     | '/pathfinding/$id'
     | '/sorting/$id'
     | '/trees/$id'
+    | '/dp/'
     | '/pathfinding/'
     | '/sorting/'
     | '/trees/'
@@ -113,9 +137,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DpIdRoute: typeof DpIdRoute
   PathfindingIdRoute: typeof PathfindingIdRoute
   SortingIdRoute: typeof SortingIdRoute
   TreesIdRoute: typeof TreesIdRoute
+  DpIndexRoute: typeof DpIndexRoute
   PathfindingIndexRoute: typeof PathfindingIndexRoute
   SortingIndexRoute: typeof SortingIndexRoute
   TreesIndexRoute: typeof TreesIndexRoute
@@ -128,6 +154,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dp/': {
+      id: '/dp/'
+      path: '/dp'
+      fullPath: '/dp/'
+      preLoaderRoute: typeof DpIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dp/$id': {
+      id: '/dp/$id'
+      path: '/dp/$id'
+      fullPath: '/dp/$id'
+      preLoaderRoute: typeof DpIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pathfinding/': {
@@ -177,9 +217,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DpIdRoute: DpIdRoute,
   PathfindingIdRoute: PathfindingIdRoute,
   SortingIdRoute: SortingIdRoute,
   TreesIdRoute: TreesIdRoute,
+  DpIndexRoute: DpIndexRoute,
   PathfindingIndexRoute: PathfindingIndexRoute,
   SortingIndexRoute: SortingIndexRoute,
   TreesIndexRoute: TreesIndexRoute,

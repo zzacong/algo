@@ -46,9 +46,9 @@ export const CATEGORIES: Category[] = [
     id: "dynamic-programming",
     name: "Dynamic Programming",
     description: "Break problems into overlapping subproblems — Fibonacci, knapsack, LCS.",
-    route: "/dynamic-programming",
-    count: null,
-    status: "coming-soon",
+    route: "/dp",
+    count: 6,
+    status: "live",
   },
   {
     id: "searching",
