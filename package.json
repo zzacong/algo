@@ -11,7 +11,10 @@
     "fmt:check": "oxfmt --check",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "check": "pnpm fmt:check && pnpm typecheck && pnpm lint"
+    "check": "pnpm fmt:check && pnpm typecheck && pnpm lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -34,10 +37,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6",
+    "@vitest/coverage-v8": "^4.1.10",
     "oxfmt": "^0.61.0",
     "oxlint": "^1.76.0",
     "shadcn": "^4.16.1",
     "typescript": "~6",
-    "vite": "^8"
+    "vite": "^8",
+    "vitest": "^4.1.10"
   }
 }

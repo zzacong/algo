@@ -5,7 +5,7 @@ import { ArrowIcon } from "@/components/arrow-icon";
 import { PageFooter } from "@/components/page-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SortVisualizer } from "@/components/sort-visualizer";
-import { ALGORITHMS, SEED_INPUT, type Algorithm, type SortFrame } from "@/data/algorithms";
+import { ALGORITHMS, SEED_INPUT, type Algorithm, type SortFrame } from "@/data/sorting";
 
 export const Route = createFileRoute("/sorting/")({
   component: SortingGalleryPage,

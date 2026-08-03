@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import type { SortFrame } from "@/data/algorithms";
+import type { SortFrame } from "@/data/sorting";
 
 interface SortVisualizerProps {
   frames: SortFrame[];
