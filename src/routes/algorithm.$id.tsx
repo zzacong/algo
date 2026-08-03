@@ -102,7 +102,7 @@ function AlgorithmDetailPage() {
               Live Animation — {frames.length} frames
             </p>
             <div className="rounded-xl border border-border bg-muted/30 p-4 sm:p-6">
-              <SortVisualizer frames={frames} fps={10} size="lg" />
+              <SortVisualizer frames={frames} fps={5} size="lg" />
             </div>
             <p className="text-[11px] text-muted-foreground/60">
               Input: <code className="font-mono">[7, 3, 11, 1, 9, 4, 12, 6, 2, 10, 5, 8]</code> —
