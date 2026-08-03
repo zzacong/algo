@@ -1,3 +1,6 @@
+import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+
 interface ArrowIconProps {
   direction?: "left" | "right";
   className?: string;
@@ -5,21 +8,10 @@ interface ArrowIconProps {
 
 export function ArrowIcon({ direction = "right", className }: ArrowIconProps) {
   return (
-    <svg
+    <HugeiconsIcon
+      icon={direction === "right" ? ArrowRight01Icon : ArrowLeft01Icon}
       className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
       aria-hidden="true"
-    >
-      {direction === "right" ? (
-        <path d="M5 12h14M13 6l6 6-6 6" />
-      ) : (
-        <path d="M19 12H5M11 6l-6 6 6 6" />
-      )}
-    </svg>
+    />
   );
 }
