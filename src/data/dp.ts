@@ -286,7 +286,12 @@ function lisFrames(): DPFrame[] {
       comparing.push(j);
       frames.push({
         table: { kind: "1d", cells: cells1d(dp, i), label: `dp[0..${N - 1}]` },
-        secondary: { kind: "lis-scan", comparing: [...comparing], accepted: [...accepted], current: i },
+        secondary: {
+          kind: "lis-scan",
+          comparing: [...comparing],
+          accepted: [...accepted],
+          current: i,
+        },
         stats: {
           input: INPUT.join(", "),
           comparing: `INPUT[${j}]=${INPUT[j]} < INPUT[${i}]=${INPUT[i]}?`,
@@ -414,9 +419,7 @@ function lcsFrames(): DPFrame[] {
   const N = B.length;
   const frames: DPFrame[] = [];
 
-  const dp: (number | null)[][] = Array.from({ length: M + 1 }, () =>
-    new Array(N + 1).fill(null),
-  );
+  const dp: (number | null)[][] = Array.from({ length: M + 1 }, () => new Array(N + 1).fill(null));
 
   for (let i = 0; i <= M; i++) dp[i][0] = 0;
   for (let j = 0; j <= N; j++) dp[0][j] = 0;
@@ -429,11 +432,7 @@ function lcsFrames(): DPFrame[] {
       row.map((v, c) => ({
         value: v,
         state:
-          r === cr && c === cc
-            ? "active"
-            : v !== null
-              ? "computed"
-              : ("default" as DPCellState),
+          r === cr && c === cc ? "active" : v !== null ? "computed" : ("default" as DPCellState),
       })),
     );
   }
@@ -459,7 +458,13 @@ function lcsFrames(): DPFrame[] {
   }
 
   frames.push({
-    table: { kind: "2d", cells: makeGrid(-1, -1), rowLabels, colLabels, label: `LCS "${A}" / "${B}"` },
+    table: {
+      kind: "2d",
+      cells: makeGrid(-1, -1),
+      rowLabels,
+      colLabels,
+      label: `LCS "${A}" / "${B}"`,
+    },
     secondary: { kind: "dependency-arrows", arrows: [], currentRow: 0, currentCol: 0 },
     stats: { a: A, b: B, computing: "base cases" },
   });
@@ -469,7 +474,13 @@ function lcsFrames(): DPFrame[] {
       const match = A[i - 1] === B[j - 1];
 
       frames.push({
-        table: { kind: "2d", cells: makeGrid(i, j), rowLabels, colLabels, label: `LCS "${A}" / "${B}"` },
+        table: {
+          kind: "2d",
+          cells: makeGrid(i, j),
+          rowLabels,
+          colLabels,
+          label: `LCS "${A}" / "${B}"`,
+        },
         secondary: makeArrows(i, j, match),
         stats: {
           a: A,
@@ -483,7 +494,13 @@ function lcsFrames(): DPFrame[] {
       dp[i][j] = match ? dp[i - 1][j - 1]! + 1 : Math.max(dp[i - 1][j]!, dp[i][j - 1]!);
 
       frames.push({
-        table: { kind: "2d", cells: makeGrid(i, j), rowLabels, colLabels, label: `LCS "${A}" / "${B}"` },
+        table: {
+          kind: "2d",
+          cells: makeGrid(i, j),
+          rowLabels,
+          colLabels,
+          label: `LCS "${A}" / "${B}"`,
+        },
         secondary: makeArrows(i, j, match),
         stats: { a: A, b: B, computing: `dp[${i}][${j}] = ${dp[i][j]}` },
       });
@@ -491,7 +508,13 @@ function lcsFrames(): DPFrame[] {
   }
 
   frames.push({
-    table: { kind: "2d", cells: makeGrid(-1, -1), rowLabels, colLabels, label: `LCS "${A}" / "${B}"` },
+    table: {
+      kind: "2d",
+      cells: makeGrid(-1, -1),
+      rowLabels,
+      colLabels,
+      label: `LCS "${A}" / "${B}"`,
+    },
     secondary: { kind: "dependency-arrows", arrows: [], currentRow: M, currentCol: N },
     stats: { a: A, b: B, result: `LCS length = ${dp[M][N]}` },
   });
@@ -509,9 +532,7 @@ function editDistanceFrames(): DPFrame[] {
   const N = B.length;
   const frames: DPFrame[] = [];
 
-  const dp: (number | null)[][] = Array.from({ length: M + 1 }, () =>
-    new Array(N + 1).fill(null),
-  );
+  const dp: (number | null)[][] = Array.from({ length: M + 1 }, () => new Array(N + 1).fill(null));
 
   for (let i = 0; i <= M; i++) dp[i][0] = i;
   for (let j = 0; j <= N; j++) dp[0][j] = j;
@@ -524,11 +545,7 @@ function editDistanceFrames(): DPFrame[] {
       row.map((v, c) => ({
         value: v,
         state:
-          r === cr && c === cc
-            ? "active"
-            : v !== null
-              ? "computed"
-              : ("default" as DPCellState),
+          r === cr && c === cc ? "active" : v !== null ? "computed" : ("default" as DPCellState),
       })),
     );
   }
@@ -547,7 +564,13 @@ function editDistanceFrames(): DPFrame[] {
   }
 
   frames.push({
-    table: { kind: "2d", cells: makeGrid(-1, -1), rowLabels, colLabels, label: `Edit Distance "${A}" → "${B}"` },
+    table: {
+      kind: "2d",
+      cells: makeGrid(-1, -1),
+      rowLabels,
+      colLabels,
+      label: `Edit Distance "${A}" → "${B}"`,
+    },
     secondary: { kind: "dependency-arrows", arrows: [], currentRow: 0, currentCol: 0 },
     stats: { from: A, to: B, computing: "base cases" },
   });
@@ -557,7 +580,13 @@ function editDistanceFrames(): DPFrame[] {
       const match = A[i - 1] === B[j - 1];
 
       frames.push({
-        table: { kind: "2d", cells: makeGrid(i, j), rowLabels, colLabels, label: `Edit Distance "${A}" → "${B}"` },
+        table: {
+          kind: "2d",
+          cells: makeGrid(i, j),
+          rowLabels,
+          colLabels,
+          label: `Edit Distance "${A}" → "${B}"`,
+        },
         secondary: makeArrows(i, j),
         stats: {
           from: A,
@@ -573,7 +602,13 @@ function editDistanceFrames(): DPFrame[] {
         : Math.min(dp[i - 1][j - 1]!, dp[i - 1][j]!, dp[i][j - 1]!) + 1;
 
       frames.push({
-        table: { kind: "2d", cells: makeGrid(i, j), rowLabels, colLabels, label: `Edit Distance "${A}" → "${B}"` },
+        table: {
+          kind: "2d",
+          cells: makeGrid(i, j),
+          rowLabels,
+          colLabels,
+          label: `Edit Distance "${A}" → "${B}"`,
+        },
         secondary: makeArrows(i, j),
         stats: { from: A, to: B, computing: `dp[${i}][${j}] = ${dp[i][j]}` },
       });
@@ -581,7 +616,13 @@ function editDistanceFrames(): DPFrame[] {
   }
 
   frames.push({
-    table: { kind: "2d", cells: makeGrid(-1, -1), rowLabels, colLabels, label: `Edit Distance "${A}" → "${B}"` },
+    table: {
+      kind: "2d",
+      cells: makeGrid(-1, -1),
+      rowLabels,
+      colLabels,
+      label: `Edit Distance "${A}" → "${B}"`,
+    },
     secondary: { kind: "dependency-arrows", arrows: [], currentRow: M, currentCol: N },
     stats: { from: A, to: B, result: `edit distance = ${dp[M][N]}` },
   });
