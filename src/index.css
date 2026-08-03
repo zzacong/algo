@@ -118,6 +118,31 @@
 }
 
 @layer base {
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .skip-link:focus {
+    position: fixed;
+    top: 0.75rem;
+    left: 50%;
+    translate: -50% 0;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    z-index: 9999;
+  }
   * {
     @apply border-border outline-ring/50;
   }
@@ -126,7 +151,9 @@
   }
   html {
     @apply font-sans;
-    scroll-behavior: smooth;
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
   }
   ::selection {
     background: oklch(var(--primary) / 0.15);
@@ -138,7 +165,9 @@
 
 @layer utilities {
   .page-fade-in {
-    animation: page-in 0.2s ease-out both;
+    @media (prefers-reduced-motion: no-preference) {
+      animation: page-in 0.2s ease-out both;
+    }
   }
 }
 

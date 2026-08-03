@@ -30,7 +30,8 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
     if (!ctx) return;
 
     const height = HEIGHT[size];
-    let frameIndex = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frameIndex = reducedMotion ? frames.length - 1 : 0;
     let lastFrameTime = performance.now();
     let pauseUntil = 0;
     let rafHandle = 0;
@@ -44,20 +45,9 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
 
     resizeCanvas();
 
-    function draw(now: number) {
+    function drawFrame(index: number) {
       if (!canvas || !ctx) return;
-      const interval = 1000 / fps;
-
-      if (now >= pauseUntil && now - lastFrameTime >= interval) {
-        lastFrameTime = now;
-        frameIndex++;
-        if (frameIndex >= frames.length) {
-          frameIndex = 0;
-          pauseUntil = now + PAUSE_MS;
-        }
-      }
-
-      const currentFrame = frames[frameIndex] ?? frames[0];
+      const currentFrame = frames[index] ?? frames[0];
       const { values, states } = currentFrame;
       const canvasW = canvas.offsetWidth;
       const canvasH = height;
@@ -82,15 +72,36 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
       }
 
       ctx.globalAlpha = 1;
+    }
+
+    function draw(now: number) {
+      if (!canvas || !ctx) return;
+      const interval = 1000 / fps;
+
+      if (now >= pauseUntil && now - lastFrameTime >= interval) {
+        lastFrameTime = now;
+        frameIndex++;
+        if (frameIndex >= frames.length) {
+          frameIndex = 0;
+          pauseUntil = now + PAUSE_MS;
+        }
+      }
+
+      drawFrame(frameIndex);
       rafHandle = requestAnimationFrame(draw);
     }
 
-    rafHandle = requestAnimationFrame(draw);
+    if (reducedMotion) {
+      drawFrame(frameIndex);
+    } else {
+      rafHandle = requestAnimationFrame(draw);
+    }
 
     const ro = new ResizeObserver(() => {
       if (!canvas || !ctx) return;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       resizeCanvas();
+      if (reducedMotion) drawFrame(frameIndex);
     });
     ro.observe(canvas);
 

@@ -81,34 +81,36 @@ function GalleryPage() {
         }
       />
 
-      {/* Hero */}
-      <div className="mx-auto max-w-5xl px-4 pt-12 pb-8 sm:px-6 sm:pt-16">
-        <p className="mb-3 text-xs font-medium tracking-widest text-muted-foreground uppercase">
-          Visual learning
-        </p>
-        <h1 className="text-3xl leading-[1.1] font-bold tracking-tight text-foreground sm:text-4xl">
-          Sorting algorithms,{" "}
-          <span className="font-light text-muted-foreground italic">visualised.</span>
-        </h1>
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Watch eight classic sorting algorithms sort the same 12-element array — step by step,
-          frame by frame. Click any card to explore the full animation and complexity breakdown.
-        </p>
-        <p className="mt-3 text-xs text-muted-foreground/60">
-          Press{" "}
-          <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
-            D
-          </kbd>{" "}
-          to toggle dark mode
-        </p>
-      </div>
+      <main id="main-content">
+        {/* Hero */}
+        <div className="mx-auto max-w-5xl px-4 pt-12 pb-8 sm:px-6 sm:pt-16">
+          <p className="mb-3 text-xs font-medium tracking-widest text-muted-foreground uppercase">
+            Visual learning
+          </p>
+          <h1 className="text-3xl leading-[1.1] font-bold tracking-tight text-balance text-foreground sm:text-4xl">
+            Sorting algorithms,{" "}
+            <span className="font-light text-muted-foreground italic">visualised.</span>
+          </h1>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-pretty text-muted-foreground">
+            Watch eight classic sorting algorithms sort the same 12-element array — step by step,
+            frame by frame. Click any card to explore the full animation and complexity breakdown.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground/60">
+            Press{" "}
+            <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+              D
+            </kbd>{" "}
+            to toggle dark mode
+          </p>
+        </div>
 
-      {/* Cards grid */}
-      <main className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {ALGORITHMS.map((algo) => (
-            <AlgorithmCard key={algo.id} algo={algo} />
-          ))}
+        {/* Cards grid */}
+        <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {ALGORITHMS.map((algo) => (
+              <AlgorithmCard key={algo.id} algo={algo} />
+            ))}
+          </div>
         </div>
       </main>
 

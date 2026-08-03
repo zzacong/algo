@@ -14,7 +14,12 @@ export const Route = createFileRoute("/algorithm/$id")({
 function ComplexityRow({ label, value }: { label: string; value: string }) {
   return (
     <tr className="border-b border-border/60 last:border-0">
-      <td className="py-2.5 pr-4 pl-3 text-xs text-muted-foreground">{label}</td>
+      <th
+        scope="row"
+        className="py-2.5 pr-4 pl-3 text-left text-xs font-normal text-muted-foreground"
+      >
+        {label}
+      </th>
       <td className="py-2.5 pr-3 font-mono text-sm font-medium text-foreground">{value}</td>
     </tr>
   );
@@ -63,7 +68,7 @@ function AlgorithmDetailPage() {
       />
 
       {/* Page content */}
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
+      <main id="main-content" className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
           {/* Text column */}
           <div className="flex flex-col gap-6 lg:w-80 lg:shrink-0">
@@ -71,12 +76,14 @@ function AlgorithmDetailPage() {
               <p className="mb-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
                 Algorithm
               </p>
-              <h1 className="text-2xl leading-tight font-bold tracking-tight text-foreground sm:text-3xl">
+              <h1 className="text-2xl leading-tight font-bold tracking-tight text-balance text-foreground sm:text-3xl">
                 {algo.name}
               </h1>
             </div>
 
-            <p className="text-sm leading-relaxed text-muted-foreground">{algo.description}</p>
+            <p className="text-sm leading-relaxed text-pretty text-muted-foreground">
+              {algo.description}
+            </p>
 
             {/* Complexity table */}
             <div>
@@ -84,7 +91,13 @@ function AlgorithmDetailPage() {
                 Complexity
               </p>
               <div className="overflow-hidden rounded-lg border border-border">
-                <table className="w-full">
+                <table className="w-full" aria-label={`${algo.name} complexity`}>
+                  <thead className="sr-only">
+                    <tr>
+                      <th scope="col">Case</th>
+                      <th scope="col">Complexity</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     <ComplexityRow label="Best case" value={algo.complexity.best} />
                     <ComplexityRow label="Average case" value={algo.complexity.average} />
@@ -99,14 +112,14 @@ function AlgorithmDetailPage() {
           {/* Visualizer column */}
           <div className="flex flex-1 flex-col gap-3">
             <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-              Live Animation — {frames.length} frames
+              Live Animation — <span className="tabular-nums">{frames.length}</span> frames
             </p>
             <div className="rounded-xl border border-border bg-muted/30 p-4 sm:p-6">
               <SortVisualizer frames={frames} fps={5} size="lg" />
             </div>
             <p className="text-[11px] text-muted-foreground/60">
               Input: <code className="font-mono">[7, 3, 11, 1, 9, 4, 12, 6, 2, 10, 5, 8]</code> —
-              loops continuously
+              loops continuously…
             </p>
           </div>
         </div>
