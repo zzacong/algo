@@ -53,3 +53,32 @@ pnpm dev          # start dev server
 pnpm check        # fmt:check + typecheck + lint (run before committing)
 pnpm build        # production build
 ```
+
+## Icons
+
+This project uses **hugeicons** as the icon library (configured in `components.json`).
+
+- **Always import icon data from `@hugeicons/core-free-icons`** and render with `HugeiconsIcon` from `@hugeicons/react`. Never write custom inline SVGs for icons.
+
+```tsx
+// ✅ Correct
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon, Sun01Icon } from "@hugeicons/core-free-icons";
+
+<HugeiconsIcon icon={ArrowRight01Icon} size={16} aria-hidden="true" />
+
+// ❌ Wrong — inline SVG
+<svg viewBox="0 0 24 24" ...><path d="..." /></svg>
+
+// ❌ Wrong — different icon library
+import { ArrowRight } from "lucide-react";
+```
+
+When searching for an icon name, run:
+
+```bash
+node --input-type=module <<'EOF'
+import * as icons from '@hugeicons/core-free-icons';
+console.log(Object.keys(icons).filter(n => /YourKeyword/i.test(n)).join('\n'));
+EOF
+```
