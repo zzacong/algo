@@ -1,4 +1,4 @@
-import { Sun01Icon, Moon01Icon } from "@hugeicons/core-free-icons";
+import { Sun01Icon, Moon02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { useTheme } from "@/components/theme-provider";
@@ -13,7 +13,7 @@ export function ThemeToggle() {
       aria-label="Toggle dark mode"
       title="Toggle dark mode (D)"
     >
-      <HugeiconsIcon icon={isDark ? Sun01Icon : Moon01Icon} size={14} aria-hidden="true" />
+      <HugeiconsIcon icon={isDark ? Sun01Icon : Moon02Icon} size={14} aria-hidden="true" />
       <span className="hidden sm:inline">{isDark ? "Light" : "Dark"}</span>
     </button>
   );
