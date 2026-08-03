@@ -126,5 +126,29 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  ::selection {
+    background: oklch(var(--primary) / 0.15);
+  }
+  :focus-visible {
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .page-fade-in {
+    animation: page-in 0.2s ease-out both;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
