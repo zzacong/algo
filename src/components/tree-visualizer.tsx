@@ -124,11 +124,14 @@ export function TreeVisualizer({ frames, fps = 6, size = "sm" }: TreeVisualizerP
       const nodeRadius = size === "lg" ? 18 : 11;
       const fontSize = size === "lg" ? 11 : 7;
 
-      // Compute pixel positions
+      // Compute pixel positions — inset by nodeRadius so circles aren't clipped
       function px(id: number): { x: number; y: number } | null {
         const p = layout.get(id);
         if (!p) return null;
-        return { x: p.x * canvasW, y: p.y * canvasH };
+        return {
+          x: nodeRadius + p.x * (canvasW - 2 * nodeRadius),
+          y: nodeRadius + p.y * (canvasH - 2 * nodeRadius),
+        };
       }
 
       // Draw edges first (behind nodes)
