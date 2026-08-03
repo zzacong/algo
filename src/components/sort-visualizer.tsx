@@ -40,8 +40,8 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
       const primary = style.getPropertyValue("--primary").trim();
       const muted = style.getPropertyValue("--muted").trim();
       return {
-        bar: `oklch(${primary})`,
-        bg: `oklch(${muted})`,
+        bar: primary,
+        bg: muted,
       };
     }
 
@@ -76,7 +76,7 @@ export function SortVisualizer({ frames, fps = 10, size = "sm" }: SortVisualizer
         // Slightly highlight bars that are in position (last few frames look sorted)
         const isFinalFrame = frameIndex === frames.length - 1;
         ctx.fillStyle = isFinalFrame
-          ? `oklch(${getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()})`
+          ? getComputedStyle(document.documentElement).getPropertyValue("--primary").trim()
           : barColor;
         ctx.globalAlpha = isFinalFrame ? 1 : 0.75 + 0.25 * (i / n);
 
