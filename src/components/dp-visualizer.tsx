@@ -766,15 +766,19 @@ export function DPVisualizer({ frames, variant, fps = 4, size = "lg" }: DPVisual
   }, [frames, variant, fps, size, canvasHeight]);
 
   return (
-    <div aria-hidden="true" className="flex w-full gap-2" style={{ height: canvasHeight }}>
+    <div
+      aria-hidden="true"
+      className="flex w-full gap-2 overflow-hidden"
+      style={{ height: canvasHeight }}
+    >
       <canvas
         ref={tableRef}
-        className="flex-1 rounded-sm"
+        className="min-w-0 flex-1 rounded-sm"
         style={{ height: canvasHeight, display: "block" }}
       />
       <canvas
         ref={secondaryRef}
-        className="flex-1 rounded-sm"
+        className="min-w-0 flex-1 rounded-sm"
         style={{ height: canvasHeight, display: "block" }}
       />
     </div>
