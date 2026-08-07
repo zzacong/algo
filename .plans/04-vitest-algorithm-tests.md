@@ -80,15 +80,15 @@ Tests each of the 8 sort algorithms with 11 shared tests + algorithm-specific ch
 
 Tests BFS, DFS, Dijkstra, and A\*:
 
-| Check                  | Detail                                                                           |
-| ---------------------- | -------------------------------------------------------------------------------- |
-| Frames returned        | At least one frame                                                               |
-| First frame            | Grid has `"start"` and `"end"` cells; no `"visited"` or `"path"` cells           |
+| Check                  | Detail                                                                                              |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| Frames returned        | At least one frame                                                                                  |
+| First frame            | Grid has `"start"` and `"end"` cells; no `"visited"` or `"path"` cells                              |
 | Last frame             | Has path cells or a path-found stat (`path: "found"` for BFS/DFS; `"path length"` for Dijkstra/A\*) |
-| Path validity          | `"path"` cells form a connected chain from start to end                          |
-| Start/end preservation | `"start"` and `"end"` cells never overwritten across all frames                  |
-| Wall preservation      | Wall cells never overwritten across all frames                                   |
-| BFS optimality         | Path length within expected range for the demo grid                              |
+| Path validity          | `"path"` cells form a connected chain from start to end                                             |
+| Start/end preservation | `"start"` and `"end"` cells never overwritten across all frames                                     |
+| Wall preservation      | Wall cells never overwritten across all frames                                                      |
+| BFS optimality         | Path length within expected range for the demo grid                                                 |
 
 ---
 
@@ -96,26 +96,26 @@ Tests BFS, DFS, Dijkstra, and A\*:
 
 Tests BST Insert, BST Search, BST Delete, and AVL Rotation:
 
-| Algorithm       | Key assertions                                                                                          |
-| --------------- | ------------------------------------------------------------------------------------------------------- |
-| BST Insert (55) | Node 55 inserted as left child of 60; root unchanged at 50; BST property holds                         |
+| Algorithm       | Key assertions                                                                                           |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| BST Insert (55) | Node 55 inserted as left child of 60; root unchanged at 50; BST property holds                           |
 | BST Search (65) | A frame has `stats.result === "found 65"`; node 65 state is `"found"`; tree unmodified across all frames |
-| BST Delete (30) | No live node with value 30 in last frame; replaced by in-order successor (40); BST property holds       |
-| AVL Rotation    | Root becomes 20; node 10 is left child; node 30 is right child; height stat is `"2"`                   |
+| BST Delete (30) | No live node with value 30 in last frame; replaced by in-order successor (40); BST property holds        |
+| AVL Rotation    | Root becomes 20; node 10 is left child; node 30 is right child; height stat is `"2"`                     |
 
 ---
 
 ## Files affected
 
-| File                           | Action                                        |
-| ------------------------------ | --------------------------------------------- |
-| `vite.config.ts`               | Added `test` block                            |
-| `tsconfig.app.json`            | Added `vitest/globals` to `types`             |
-| `package.json`                 | Added `test`, `test:watch`, `coverage` scripts |
-| `src/data/sorting.ts`          | Renamed from `algorithms.ts`                  |
-| `src/data/sorting.test.ts`     | New — 93 sorting tests                        |
-| `src/data/pathfinding.test.ts` | New — 54 pathfinding tests                    |
-| `src/data/trees.test.ts`       | New — 49 tree tests                           |
-| `src/routes/sorting/$id.tsx`   | Import updated to `@/data/sorting`            |
-| `src/routes/sorting/index.tsx` | Import updated to `@/data/sorting`            |
-| `src/components/sort-visualizer.tsx` | Import updated to `@/data/sorting`      |
+| File                                 | Action                                         |
+| ------------------------------------ | ---------------------------------------------- |
+| `vite.config.ts`                     | Added `test` block                             |
+| `tsconfig.app.json`                  | Added `vitest/globals` to `types`              |
+| `package.json`                       | Added `test`, `test:watch`, `coverage` scripts |
+| `src/data/sorting.ts`                | Renamed from `algorithms.ts`                   |
+| `src/data/sorting.test.ts`           | New — 93 sorting tests                         |
+| `src/data/pathfinding.test.ts`       | New — 54 pathfinding tests                     |
+| `src/data/trees.test.ts`             | New — 49 tree tests                            |
+| `src/routes/sorting/$id.tsx`         | Import updated to `@/data/sorting`             |
+| `src/routes/sorting/index.tsx`       | Import updated to `@/data/sorting`             |
+| `src/components/sort-visualizer.tsx` | Import updated to `@/data/sorting`             |

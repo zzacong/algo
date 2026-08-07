@@ -36,7 +36,7 @@ Use **hugeicons**: import data from `@hugeicons/core-free-icons`, render with `H
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
-<HugeiconsIcon icon={ArrowRight01Icon} size={16} aria-hidden="true" />
+<HugeiconsIcon icon={ArrowRight01Icon} size={16} aria-hidden="true" />;
 ```
 
 To find an icon name:
